@@ -72,7 +72,7 @@ const assignments = [
   },
 ];
 
-const users = [
+let users = [
   {
     id: 1,
     name: "Abhay",
@@ -80,7 +80,7 @@ const users = [
     password: "abhay1234",
     token: uuid(),
     role: 1,
-    verified: "approved",
+    status: "approved",
   },
   {
     id: 2,
@@ -89,7 +89,7 @@ const users = [
     password: "suneri1234",
     token: uuid(),
     role: 2,
-    verified: "approved",
+    status: "approved",
   },
   {
     id: 3,
@@ -98,7 +98,7 @@ const users = [
     password: "arthi1234",
     token: uuid(),
     role: 1,
-    verified: "approved",
+    status: "approved",
   },
   {
     id: 4,
@@ -107,7 +107,7 @@ const users = [
     password: "valli1234",
     token: uuid(),
     role: 1,
-    verified: "approved",
+    status: "approved",
   },
   {
     id: 99,
@@ -116,7 +116,7 @@ const users = [
     password: "123456",
     token: uuid(),
     role: 3,
-    verified: "approved",
+    status: "approved",
   },
   {
     id: 5,
@@ -125,7 +125,7 @@ const users = [
     password: "sivan1234",
     token: uuid(),
     role: 2,
-    verified: "pending",
+    status: "pending",
   },
 ];
 
@@ -158,7 +158,7 @@ app.get("/assignments", verifyToken, (req, res) => {
 
 app.get("/admin", verifyToken, (req, res) => {
   console.log("admin request");
-  const unverifiedUsers = users.filter((user) => user.verified === "pending");
+  const unverifiedUsers = users.filter((user) => user.status === "pending");
   console.log(unverifiedUsers);
   res.send(unverifiedUsers);
 });
@@ -168,7 +168,7 @@ app.post("/login", (req, res) => {
   if (
     user &&
     user.password === req.body.password &&
-    user.verified === "approved"
+    user.status === "approved"
   ) {
     return res.send({
       id: user.id,
@@ -258,17 +258,20 @@ app.post("/assignments/submissions/update/", verifyToken, (req, res) => {
 });
 
 app.post("/admin", verifyToken, (req, res) => {
-  const unverifiedUsers = users.filter((user) => user.verified !== "approved");
+  const unverifiedUsers = users.filter((user) => user.status !== "approved");
   console.log(unverifiedUsers);
 
   for (let user of req.body.users) {
     for (let unverifiedUser of unverifiedUsers) {
       if (user.id == unverifiedUser.id) {
-        unverifiedUser.verified = user.verified;
+        unverifiedUser.status = user.status;
       }
     }
   }
-  console.log(unverifiedUsers);
+
+  users = users.filter((user) => user.status !== "rejected");
+
+  console.log(users);
   res.send("Users verified");
 });
 

@@ -61,14 +61,14 @@ const Admin = ({ loginCredentials, setLoginCredentials }) => {
                       type="radio"
                       value="approve"
                       name="approve"
-                      onClick={() => (user.verified = "approved")}
+                      onClick={() => (user.status = "approved")}
                     />
                     Approve
                     <input
                       type="radio"
                       value="reject"
                       name="reject"
-                      onClick={() => (user.verified = "rejected")}
+                      onClick={() => (user.status = "rejected")}
                     />
                     Reject
                   </li>

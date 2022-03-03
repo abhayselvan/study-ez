@@ -66,7 +66,7 @@ function Assignments({ loginCredentials, setLoginCredentials }) {
   return (
     <div>
       {authorized ? (
-        <section>
+        <section className="assignments">
           <h2>ASSIGNMENTS</h2>
           <ul>
             {!loading &&

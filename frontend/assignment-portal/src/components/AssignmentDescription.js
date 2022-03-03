@@ -92,7 +92,7 @@ function AssignmentDescription({ loginCredentials, setLoginCredentials }) {
   return (
     <div>
       {authorized ? (
-        <section>
+        <section className="assignments">
           <h2>{assignment.title}</h2>
           {loginCredentials.role === 1 ? (
             <div>

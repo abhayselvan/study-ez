@@ -233,7 +233,7 @@ app.post("/assignments/submissions/", verifyToken, (req, res) => {
   console.log(req.body);
   const id = parseInt(req.body.assignmentId);
   const requestedSubmissions = submissions.filter(
-    (item) => item.assignmentId === id
+    (item) => item.assignmentId == id
   );
   console.log(requestedSubmissions);
   res.send(requestedSubmissions);
@@ -247,7 +247,7 @@ app.post("/assignments/submissions/update/", verifyToken, (req, res) => {
 
   for (let updatedSubmission of updatedSubmissions) {
     for (let submission of submissions) {
-      if (updatedSubmission.id === submission.id) {
+      if (updatedSubmission.id == submission.id) {
         submission.score = updatedSubmission.score;
         submission.feedback = updatedSubmission.feedback;
       }
@@ -263,7 +263,7 @@ app.post("/admin", verifyToken, (req, res) => {
 
   for (let user of req.body.users) {
     for (let unverifiedUser of unverifiedUsers) {
-      if (user.id === unverifiedUser.id) {
+      if (user.id == unverifiedUser.id) {
         unverifiedUser.verified = user.verified;
       }
     }

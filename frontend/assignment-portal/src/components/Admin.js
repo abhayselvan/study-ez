@@ -26,7 +26,7 @@ const Admin = ({ loginCredentials, setLoginCredentials }) => {
       .catch((error) => console.log("error", error));
   }, [loading]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e, id) => {
     e.preventDefault();
 
     var myHeaders = new Headers();
@@ -34,7 +34,7 @@ const Admin = ({ loginCredentials, setLoginCredentials }) => {
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
-      id: 2,
+      id,
       approved: true,
     });
 
@@ -71,25 +71,13 @@ const Admin = ({ loginCredentials, setLoginCredentials }) => {
                 return (
                   <li key={user.id}>
                     <span>{user.email}</span>
-                    <input
-                      type="radio"
-                      value="approve"
-                      name="approve"
-                      onClick={() => (user.approved = true)}
-                    />
-                    Approve
-                    <input
-                      type="radio"
-                      value="reject"
-                      name="reject"
-                      onClick={() => (user.approved = false)}
-                    />
-                    Reject
+                    <button onClick={(e) => handleSubmit(e, user.id)}>
+                      Approve
+                    </button>
                   </li>
                 );
               })}
           </ul>
-          <input type="submit" onClick={handleSubmit} />
         </form>
       )}
       <button onClick={handleLogout}>Log out</button>

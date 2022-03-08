@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -8,6 +7,7 @@ function Discussions({ loginCredentials, setLoginCredentials }) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [role, setRole] = useState(2);
+  const [userId, setUserId] = useState(null);
   const [discussions, setDiscussions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(true);
@@ -17,51 +17,61 @@ function Discussions({ loginCredentials, setLoginCredentials }) {
     const decode = async () => {
       const decodedToken = await decodeToken(loginCredentials?.token);
       setRole(parseInt(decodedToken.role));
+      setUserId(parseInt(decodedToken.id));
       console.log(decodedToken);
     };
     decode();
-  });
-
-  useEffect(() => {
-    const fetchDiscussions = async () => {
-      try {
-        const fetchedDiscussions = await axios.post(
-          "http://localhost:8000/discussions/list",
-          {
-            headers: { Authorization: `Bearer ${loginCredentials?.token}` },
-          }
-        );
-        console.log(fetchedDiscussions);
-        setDiscussions(fetchedDiscussions.data);
-        setLoading(false);
-      } catch (err) {
-        setAuthorized(false);
-      }
-    };
-
-    fetchDiscussions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSubmit = async (e) => {
+  useEffect(() => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${loginCredentials.token}`);
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch("http://localhost:8000/discussions/list", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setDiscussions(result.discussions);
+        setLoading(false);
+      })
+      .catch((error) => setAuthorized(false));
+  }, []);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     const newDiscussion = {
+      discussion_id: discussions.length + 1,
+      user_id: userId,
       title: title,
       body: body,
     };
 
     setDiscussions([...discussions, newDiscussion]);
 
-    const response = await axios.post(
-      "http://localhost:8000/discussions/create",
-      newDiscussion,
-      {
-        headers: { authorization: `Bearer ${loginCredentials?.token}` },
-      }
-    );
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${loginCredentials.token}`);
+    myHeaders.append("Content-Type", "application/json");
 
-    console.log(response);
+    var raw = JSON.stringify({ title, body });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch("http://localhost:8000/discussions/create/", requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+
     setTitle("");
     setBody("");
   };
@@ -81,15 +91,18 @@ function Discussions({ loginCredentials, setLoginCredentials }) {
             {!loading &&
               discussions.map((item) => {
                 return (
-                  <li key={item.id}>
-                    <Link to={`/discussions/${item.id}`} key={item.id}>
+                  <li key={item.discussion_id}>
+                    <Link
+                      to={`/discussions/${item.discussion_id}`}
+                      key={item.discussion_id}
+                    >
                       {item.title}
                     </Link>
                   </li>
                 );
               })}
           </ul>
-          {role === 1 && (
+          {role === 2 && (
             <div>
               <input
                 type="text"

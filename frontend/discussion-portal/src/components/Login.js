@@ -33,7 +33,7 @@ function Login({
       setLoginCredentials(loginResponse.data);
 
       if (email === "admin@domain.com") navigate("/admin");
-      else navigate("/assignments");
+      else navigate("/discussions");
     } catch (err) {
       console.log(err);
       setErrorMessage("Invalid Email/Password");

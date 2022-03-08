@@ -33,7 +33,7 @@ const Admin = ({ loginCredentials, setLoginCredentials }) => {
           users,
         },
         {
-          headers: { authorization: `Bearer ${loginCredentials?.token}` },
+          headers: { Authorization: `Bearer ${loginCredentials?.token}` },
         }
       );
       setLoading(true);

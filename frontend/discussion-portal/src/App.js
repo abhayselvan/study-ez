@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
-import Assignments from "./components/Assignments";
-import AssignmentDescription from "./components/AssignmentDescription";
 import Admin from "./components/Admin";
 import "./App.css";
+import Discussions from "./components/Discussions";
+import DiscussionDetails from "./components/DiscussionDetails";
 
 function App() {
   const [email, setEmail] = useState("");
@@ -40,18 +40,18 @@ function App() {
           }
         />
         <Route
-          path="assignments"
+          path="discussions"
           element={
-            <Assignments
+            <Discussions
               loginCredentials={loginCredentials}
               setLoginCredentials={setLoginCredentials}
             />
           }
         />
         <Route
-          path="assignments/:id"
+          path="discussions/:id"
           element={
-            <AssignmentDescription
+            <DiscussionDetails
               loginCredentials={loginCredentials}
               setLoginCredentials={setLoginCredentials}
             />

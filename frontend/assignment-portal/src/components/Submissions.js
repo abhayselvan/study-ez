@@ -13,7 +13,7 @@ const Submissions = ({ submissions, setSubmissions, loginCredentials, id }) => {
     setEditId(id);
   };
 
-  const saveSubmission = (e, id) => {
+  const saveSubmission = async (e, id) => {
     e.preventDefault();
     const currentEntry = submissions.filter(
       (submission) => submission.id === editId
@@ -21,17 +21,14 @@ const Submissions = ({ submissions, setSubmissions, loginCredentials, id }) => {
     currentEntry.score = score;
     currentEntry.feedback = feedback;
     setEditId(null);
-  };
-
-  const handleUpdate = async (e) => {
-    e.preventDefault();
 
     try {
       const response = await axios.post(
-        `http://localhost:8000/assignments/submissions/update/`,
+        `http://localhost:8000/assignments/${id}/submissions/update/`,
         {
-          submissions,
-          id,
+          id: currentEntry.id,
+          score: currentEntry.score,
+          feedback: currentEntry.feedback,
         },
         {
           headers: { Authorization: `Bearer ${loginCredentials?.token}` },
@@ -81,7 +78,6 @@ const Submissions = ({ submissions, setSubmissions, loginCredentials, id }) => {
           })}
         </tbody>
       </table>
-      <button onClick={handleUpdate}>Update</button>
     </div>
   );
 };

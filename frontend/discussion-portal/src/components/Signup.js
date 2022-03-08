@@ -70,17 +70,17 @@ function Signup({ email, setEmail, password, setPassword }) {
           />
           <div required onChange={(e) => setRole(e.target.value)}>
             <input
-              type="radio"
               checked={role === "student"}
               onChange={() => {}}
+              type="radio"
               value="student"
               name="student"
             />{" "}
             Student
             <input
-              type="radio"
               checked={role === "faculty"}
               onChange={() => {}}
+              type="radio"
               value="faculty"
               name="faculty"
             />{" "}

@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { decodeToken } from "react-jwt";
 
-function Assignments({ loginCredentials, setLoginCredentials }) {
+function Discussions({ loginCredentials, setLoginCredentials }) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [role, setRole] = useState(2);
-  const [assignments, setAssignments] = useState([]);
+  const [discussions, setDiscussions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(true);
   const navigate = useNavigate();
@@ -23,56 +23,39 @@ function Assignments({ loginCredentials, setLoginCredentials }) {
   });
 
   useEffect(() => {
-    const fetchAssignments = async () => {
-      console.log("working", loginCredentials);
+    const fetchDiscussions = async () => {
       try {
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", `Bearer ${loginCredentials.token}`);
-
-        var requestOptions = {
-          method: "POST",
-          headers: myHeaders,
-          redirect: "follow",
-        };
-
-        fetch("http://localhost:8000/assignments/list", requestOptions)
-          .then((response) => response.text())
-          .then((result) => console.log(result))
-          .catch((error) => console.log("error", error));
-
-        // const fetchedAssignments = await axios.post(
-        //   "http://localhost:8000/assignments/list",
-        //   {
-        //     headers: {
-        //       Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJlbWFpbCI6ImFiaGF5QGdtYWlsLmNvbSIsImlkIjoiMiIsImlzcyI6ImF1dGgwIiwicm9sZSI6IjEifQ.3jRfjUg-zF_Uzfyopr3D5uxTXM5jwu4RHaJSfHdEdTQ`,
-        //     },
-        //   }
-        // );
-        // console.log(fetchedAssignments);
-        // setAssignments(fetchedAssignments.data);
+        const fetchedDiscussions = await axios.post(
+          "http://localhost:8000/discussions/list",
+          {
+            headers: { Authorization: `Bearer ${loginCredentials?.token}` },
+          }
+        );
+        console.log(fetchedDiscussions);
+        setDiscussions(fetchedDiscussions.data);
         setLoading(false);
       } catch (err) {
         setAuthorized(false);
       }
     };
 
-    fetchAssignments();
+    fetchDiscussions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const newAssignment = {
+    const newDiscussion = {
       title: title,
       body: body,
     };
 
-    setAssignments([...assignments, newAssignment]);
+    setDiscussions([...discussions, newDiscussion]);
 
     const response = await axios.post(
-      "http://localhost:8000/assignments/create",
-      newAssignment,
+      "http://localhost:8000/discussions/create",
+      newDiscussion,
       {
         headers: { authorization: `Bearer ${loginCredentials?.token}` },
       }
@@ -92,14 +75,14 @@ function Assignments({ loginCredentials, setLoginCredentials }) {
   return (
     <div>
       {authorized ? (
-        <section className="assignments">
-          <h2>ASSIGNMENTS</h2>
+        <section className="discussions">
+          <h2>DISCUSSIONS</h2>
           <ul>
             {!loading &&
-              assignments.map((item) => {
+              discussions.map((item) => {
                 return (
                   <li key={item.id}>
-                    <Link to={`/assignments/${item.id}`} key={item.id}>
+                    <Link to={`/discussions/${item.id}`} key={item.id}>
                       {item.title}
                     </Link>
                   </li>
@@ -119,7 +102,7 @@ function Assignments({ loginCredentials, setLoginCredentials }) {
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
               />
-              <button onClick={handleSubmit}>Create New Assignment</button>
+              <button onClick={handleSubmit}>Create New Discussion</button>
             </div>
           )}
           <button onClick={handleLogout}>Log out</button>
@@ -131,4 +114,4 @@ function Assignments({ loginCredentials, setLoginCredentials }) {
   );
 }
 
-export default Assignments;
+export default Discussions;

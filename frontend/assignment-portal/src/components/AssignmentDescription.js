@@ -1,22 +1,32 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { v4 as uuid } from "uuid";
 import Submissions from "./Submissions";
+import { decodeToken } from "react-jwt";
 
 function AssignmentDescription({ loginCredentials, setLoginCredentials }) {
   const [assignment, setAssignment] = useState({});
   const [submissions, setSubmissions] = useState([]);
   const [answer, setAnswer] = useState("");
   const [authorized, setAuthorized] = useState(true);
+  const [role, setRole] = useState(2);
   const { id } = useParams();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const decode = async () => {
+      const decodedToken = await decodeToken(loginCredentials?.token);
+      setRole(parseInt(decodedToken.role));
+      console.log(decodedToken);
+    };
+    decode();
+  });
 
   useEffect(() => {
     const fetchAssignment = async () => {
       try {
         const fetchedAssignment = await axios.get(
-          `http://localhost:8000/assignments/${id}`,
+          `http://localhost:8000/assignments/list/${id}`,
           {
             headers: { Authorization: `Bearer ${loginCredentials?.token}` },
           }
@@ -35,10 +45,7 @@ function AssignmentDescription({ loginCredentials, setLoginCredentials }) {
     const fetchSubmissions = async () => {
       try {
         const fetchedSubmissions = await axios.post(
-          `http://localhost:8000/assignments/submissions/`,
-          {
-            assignmentId: id,
-          },
+          `http://localhost:8000/assignments/list/${id}/submissions`,
           {
             headers: { Authorization: `Bearer ${loginCredentials?.token}` },
           }
@@ -60,15 +67,9 @@ function AssignmentDescription({ loginCredentials, setLoginCredentials }) {
 
     try {
       const response = await axios.post(
-        `http://localhost:8000/assignments/submit/`,
+        `http://localhost:8000/assignments/list/${id}/submissions/add`,
         {
-          id: uuid(),
-          name: loginCredentials.name,
           answer: answer,
-          assignmentId: id,
-          studentId: loginCredentials.id,
-          score: 0,
-          feedback: "",
         },
         {
           headers: { Authorization: `Bearer ${loginCredentials?.token}` },

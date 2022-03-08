@@ -10,7 +10,7 @@ const SubmissionEdit = ({
 }) => {
   return (
     <tr>
-      <td>{submission.name}</td>
+      <td>{submission.user_id}</td>
       <td>{submission.answer}</td>
       <td>
         <input value={score} onChange={(e) => setScore(e.target.value)} />

@@ -3,7 +3,7 @@ import React from "react";
 const SubmissionLine = ({ submission, editSubmission }) => {
   return (
     <tr>
-      <td>{submission.name}</td>
+      <td>{submission.user_id}</td>
       <td>{submission.answer}</td>
       <td>{submission.score}</td>
       <td>{submission.feedback}</td>

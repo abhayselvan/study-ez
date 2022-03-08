@@ -53,7 +53,7 @@ const Submissions = ({ submissions, setSubmissions, loginCredentials, id }) => {
       <table>
         <thead>
           <tr>
-            <th>Name</th>
+            <th>Student ID</th>
             <th>Answer</th>
             <th>Score</th>
             <th>Feedback</th>

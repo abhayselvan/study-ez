@@ -129,7 +129,9 @@ function DiscussionDetails({ loginCredentials, setLoginCredentials }) {
             <button onClick={handleSubmit}>Add Comment</button>
           </div>
 
-          <button onClick={handleLogout}>Log out</button>
+          <button className="logoutButton" onClick={handleLogout}>
+            Log out
+          </button>
         </section>
       ) : (
         <b>Unauthorized User</b>

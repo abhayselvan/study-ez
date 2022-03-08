@@ -60,24 +60,6 @@ function AssignmentDescription({ loginCredentials, setLoginCredentials }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // try {
-    //   const response = await axios.post(
-    //     `http://localhost:8000/assignments/list/${id}/submissions/add`,
-    //     {
-    //       answer: answer,
-    //     },
-    //     {
-    //       headers: { Authorization: `Bearer ${loginCredentials?.token}` },
-    //     }
-    //   );
-    //   console.log(response.data);
-    //   alert("Assignment submitted successfully!");
-    //   setAnswer("");
-    // } catch (err) {
-    //   console.error(err);
-    //   alert("Submission failed");
-    // }
-
     var myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${loginCredentials.token}`);
     myHeaders.append("Content-Type", "application/json");
@@ -132,7 +114,9 @@ function AssignmentDescription({ loginCredentials, setLoginCredentials }) {
               />
             </div>
           )}
-          <button onClick={handleLogout}>Log out</button>
+          <button className="logoutButton" onClick={handleLogout}>
+            Log out
+          </button>
         </section>
       ) : (
         <b>Unauthorized User</b>

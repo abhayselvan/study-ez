@@ -98,3 +98,9 @@ button {
   justify-content: flex-start;
   align-items: flex-end;
 }
+
+.logoutButton {
+  position: fixed;
+  right: 10px;
+  top: 5px;
+}

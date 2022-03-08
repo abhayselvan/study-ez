@@ -118,7 +118,9 @@ function Assignments({ loginCredentials, setLoginCredentials }) {
               <button onClick={handleSubmit}>Create New Assignment</button>
             </div>
           )}
-          <button onClick={handleLogout}>Log out</button>
+          <button className="logoutButton" onClick={handleLogout}>
+            Log out
+          </button>
         </section>
       ) : (
         <b>Unauthorized User</b>

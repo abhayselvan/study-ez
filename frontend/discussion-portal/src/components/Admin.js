@@ -79,7 +79,9 @@ const Admin = ({ loginCredentials, setLoginCredentials }) => {
           </ul>
         </form>
       )}
-      <button onClick={handleLogout}>Log out</button>
+      <button className="logoutButton" onClick={handleLogout}>
+        Log out
+      </button>
     </div>
   );
 };

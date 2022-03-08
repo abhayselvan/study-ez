@@ -8,18 +8,31 @@ const Admin = ({ loginCredentials, setLoginCredentials }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(loginCredentials);
-    const getUnverifiedUsers = async () => {
-      const unverifiedUsers = await axios.post(
-        `http://localhost:8000/admin/list/profs`,
-        {
-          headers: { Authorization: `Bearer ${loginCredentials.token}` },
-        }
-      );
-      setUsers(unverifiedUsers.data);
-      setLoading(false);
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${loginCredentials.token}`);
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      redirect: "follow",
     };
-    getUnverifiedUsers();
+
+    fetch("http://localhost:8000/admin/list/profs", requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+    // console.log(loginCredentials);
+    // const getUnverifiedUsers = async () => {
+    //   const unverifiedUsers = await axios.post(
+    //     `http://localhost:8000/admin/list/profs`,
+    //     {
+    //       headers: { Authorization: `Bearer ${loginCredentials.token}` },
+    //     }
+    //   );
+    //   setUsers(unverifiedUsers.data);
+    //   setLoading(false);
+    // };
+    // getUnverifiedUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 

@@ -10,7 +10,7 @@ const SubmissionLine = ({ submission, editSubmission }) => {
       <td>
         <button
           onClick={(e) => {
-            editSubmission(e, submission.id);
+            editSubmission(e, submission.submission_id);
           }}
         >
           Edit

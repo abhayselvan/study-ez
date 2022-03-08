@@ -13,31 +13,39 @@ const Submissions = ({ submissions, setSubmissions, loginCredentials, id }) => {
     setEditId(id);
   };
 
-  const saveSubmission = async (e, id) => {
+  const saveSubmission = (e) => {
     e.preventDefault();
     const currentEntry = submissions.filter(
-      (submission) => submission.id === editId
+      (submission) => submission.submission_id === editId
     )[0];
     currentEntry.score = score;
     currentEntry.feedback = feedback;
     setEditId(null);
 
-    try {
-      const response = await axios.post(
-        `http://localhost:8000/assignments/${id}/submissions/update/`,
-        {
-          id: currentEntry.id,
-          score: currentEntry.score,
-          feedback: currentEntry.feedback,
-        },
-        {
-          headers: { Authorization: `Bearer ${loginCredentials?.token}` },
-        }
-      );
-      alert(response.data);
-    } catch (err) {
-      console.error(err);
-    }
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${loginCredentials.token}`);
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      submission_id: currentEntry.submission_id,
+      score: parseInt(currentEntry.score),
+      feedback: currentEntry.feedback,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(
+      `http://localhost:8000/assignments/${id}/submissions/update`,
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
   };
 
   return (
@@ -55,16 +63,16 @@ const Submissions = ({ submissions, setSubmissions, loginCredentials, id }) => {
         <tbody>
           {submissions.map((submission) => {
             return (
-              <Fragment key={submission.id}>
-                {editId !== submission.id ? (
+              <Fragment key={submission.submission_id}>
+                {editId !== submission.submission_id ? (
                   <SubmissionLine
-                    key={submission.id}
+                    key={submission.submission_id}
                     submission={submission}
                     editSubmission={editSubmission}
                   />
                 ) : (
                   <SubmissionEdit
-                    key={submission.id}
+                    key={submission.submission_id}
                     submission={submission}
                     score={score}
                     setScore={setScore}

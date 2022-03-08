@@ -20,68 +20,89 @@ function AssignmentDescription({ loginCredentials, setLoginCredentials }) {
       console.log(decodedToken);
     };
     decode();
-  });
-
-  useEffect(() => {
-    const fetchAssignment = async () => {
-      try {
-        const fetchedAssignment = await axios.get(
-          `http://localhost:8000/assignments/list/${id}`,
-          {
-            headers: { Authorization: `Bearer ${loginCredentials?.token}` },
-          }
-        );
-        console.log(fetchedAssignment);
-        setAssignment(fetchedAssignment.data);
-      } catch (err) {
-        setAuthorized(false);
-      }
-    };
-    fetchAssignment();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const fetchSubmissions = async () => {
-      try {
-        const fetchedSubmissions = await axios.post(
-          `http://localhost:8000/assignments/list/${id}/submissions`,
-          {
-            headers: { Authorization: `Bearer ${loginCredentials?.token}` },
-          }
-        );
-        console.log("Submissions");
-        console.log(fetchedSubmissions);
-        console.log(fetchedSubmissions.data);
-        setSubmissions(fetchedSubmissions.data);
-      } catch (err) {
-        console.error(err);
-      }
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${loginCredentials.token}`);
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      redirect: "follow",
     };
-    fetchSubmissions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    fetch(`http://localhost:8000/assignments/list/${id}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => setAssignment(result))
+      .catch((error) => console.log("error", error));
+  }, []);
+
+  useEffect(() => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${loginCredentials.token}`);
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(
+      `http://localhost:8000/assignments/list/${id}/submissions`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => setSubmissions(result.submissions))
+      .catch((error) => console.log("error", error));
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await axios.post(
-        `http://localhost:8000/assignments/list/${id}/submissions/add`,
-        {
-          answer: answer,
-        },
-        {
-          headers: { Authorization: `Bearer ${loginCredentials?.token}` },
-        }
-      );
-      console.log(response.data);
-      alert("Assignment submitted successfully!");
-      setAnswer("");
-    } catch (err) {
-      console.error(err);
-      alert("Submission failed");
-    }
+    // try {
+    //   const response = await axios.post(
+    //     `http://localhost:8000/assignments/list/${id}/submissions/add`,
+    //     {
+    //       answer: answer,
+    //     },
+    //     {
+    //       headers: { Authorization: `Bearer ${loginCredentials?.token}` },
+    //     }
+    //   );
+    //   console.log(response.data);
+    //   alert("Assignment submitted successfully!");
+    //   setAnswer("");
+    // } catch (err) {
+    //   console.error(err);
+    //   alert("Submission failed");
+    // }
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${loginCredentials.token}`);
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      answer,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(
+      `http://localhost:8000/assignments/${id}/submissions/add`,
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((result) => {
+        console.log(result);
+        setAnswer("");
+      })
+      .catch((error) => console.log("error", error));
   };
 
   const handleLogout = (e) => {
@@ -95,7 +116,7 @@ function AssignmentDescription({ loginCredentials, setLoginCredentials }) {
       {authorized ? (
         <section className="assignments">
           <h2>{assignment.title}</h2>
-          {loginCredentials.role === 1 ? (
+          {role === 2 ? (
             <div>
               <div>{assignment.body}</div>
               <textarea onChange={(e) => setAnswer(e.target.value)} />

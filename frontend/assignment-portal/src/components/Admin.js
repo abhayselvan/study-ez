@@ -8,39 +8,50 @@ const Admin = ({ loginCredentials, setLoginCredentials }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(loginCredentials);
-    const getUnverifiedUsers = async () => {
-      const unverifiedUsers = await axios.post(
-        `http://localhost:8000/admin/list/profs`,
-        {
-          headers: { Authorization: `Bearer ${loginCredentials.token}` },
-        }
-      );
-      setUsers(unverifiedUsers.data);
-      setLoading(false);
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${loginCredentials.token}`);
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      redirect: "follow",
     };
-    getUnverifiedUsers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    fetch("http://localhost:8000/admin/list/profs", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setUsers(result.profs);
+        setLoading(false);
+      })
+      .catch((error) => console.log("error", error));
   }, [loading]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    try {
-      const response = await axios.post(
-        `http://localhost:8000/admin/update/prof`,
-        {
-          users,
-        },
-        {
-          headers: { authorization: `Bearer ${loginCredentials?.token}` },
-        }
-      );
-      setLoading(true);
-      console.log(response.data);
-    } catch (err) {
-      console.error(err);
-    }
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${loginCredentials?.token}`);
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      id: 2,
+      approved: true,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch("http://localhost:8000/admin/update/prof", requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        console.log(result);
+        setLoading(true);
+      })
+      .catch((error) => console.log("error", error));
   };
 
   const handleLogout = (e) => {
@@ -60,19 +71,18 @@ const Admin = ({ loginCredentials, setLoginCredentials }) => {
                 return (
                   <li key={user.id}>
                     <span>{user.email}</span>
-                    <span>{user.status}</span>
                     <input
                       type="radio"
                       value="approve"
                       name="approve"
-                      onClick={() => (user.status = 1)}
+                      onClick={() => (user.approved = true)}
                     />
                     Approve
                     <input
                       type="radio"
                       value="reject"
                       name="reject"
-                      onClick={() => (user.status = 0)}
+                      onClick={() => (user.approved = false)}
                     />
                     Reject
                   </li>

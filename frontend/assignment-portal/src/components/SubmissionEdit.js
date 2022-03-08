@@ -21,7 +21,7 @@ const SubmissionEdit = ({
       <td>
         <button
           onClick={(e) => {
-            saveSubmission(e, submission.id);
+            saveSubmission(e, submission.submission_id);
           }}
         >
           Save

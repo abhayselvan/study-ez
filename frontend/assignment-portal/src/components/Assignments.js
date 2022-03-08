@@ -8,6 +8,7 @@ function Assignments({ loginCredentials, setLoginCredentials }) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [role, setRole] = useState(2);
+  const [userId, setUserId] = useState(null);
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(true);
@@ -17,68 +18,61 @@ function Assignments({ loginCredentials, setLoginCredentials }) {
     const decode = async () => {
       const decodedToken = await decodeToken(loginCredentials?.token);
       setRole(parseInt(decodedToken.role));
+      setUserId(parseInt(decodedToken.id));
       console.log(decodedToken);
     };
     decode();
-  });
-
-  useEffect(() => {
-    const fetchAssignments = async () => {
-      console.log("working", loginCredentials);
-      try {
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", `Bearer ${loginCredentials.token}`);
-
-        var requestOptions = {
-          method: "POST",
-          headers: myHeaders,
-          redirect: "follow",
-        };
-
-        fetch("http://localhost:8000/assignments/list", requestOptions)
-          .then((response) => response.text())
-          .then((result) => console.log(result))
-          .catch((error) => console.log("error", error));
-
-        // const fetchedAssignments = await axios.post(
-        //   "http://localhost:8000/assignments/list",
-        //   {
-        //     headers: {
-        //       Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJlbWFpbCI6ImFiaGF5QGdtYWlsLmNvbSIsImlkIjoiMiIsImlzcyI6ImF1dGgwIiwicm9sZSI6IjEifQ.3jRfjUg-zF_Uzfyopr3D5uxTXM5jwu4RHaJSfHdEdTQ`,
-        //     },
-        //   }
-        // );
-        // console.log(fetchedAssignments);
-        // setAssignments(fetchedAssignments.data);
-        setLoading(false);
-      } catch (err) {
-        setAuthorized(false);
-      }
-    };
-
-    fetchAssignments();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSubmit = async (e) => {
+  useEffect(() => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${loginCredentials.token}`);
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch("http://localhost:8000/assignments/list", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAssignments(result.assignments);
+        setLoading(false);
+      })
+      .catch((error) => setAuthorized(false));
+  }, []);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     const newAssignment = {
+      assignment_id: assignments.length + 1,
+      user_id: userId,
       title: title,
       body: body,
     };
 
     setAssignments([...assignments, newAssignment]);
 
-    const response = await axios.post(
-      "http://localhost:8000/assignments/create",
-      newAssignment,
-      {
-        headers: { authorization: `Bearer ${loginCredentials?.token}` },
-      }
-    );
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${loginCredentials.token}`);
+    myHeaders.append("Content-Type", "application/json");
 
-    console.log(response);
+    var raw = JSON.stringify({ title, body });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch("http://localhost:8000/assignments/create/", requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+
     setTitle("");
     setBody("");
   };
@@ -98,8 +92,11 @@ function Assignments({ loginCredentials, setLoginCredentials }) {
             {!loading &&
               assignments.map((item) => {
                 return (
-                  <li key={item.id}>
-                    <Link to={`/assignments/${item.id}`} key={item.id}>
+                  <li key={item.assignment_id}>
+                    <Link
+                      to={`/assignments/${item.assignment_id}`}
+                      key={item.assignment_id}
+                    >
                       {item.title}
                     </Link>
                   </li>

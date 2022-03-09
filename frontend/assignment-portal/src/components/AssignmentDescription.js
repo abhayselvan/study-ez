@@ -6,9 +6,13 @@ import { decodeToken } from "react-jwt";
 function AssignmentDescription({ loginCredentials, setLoginCredentials }) {
   const [assignment, setAssignment] = useState({});
   const [submissions, setSubmissions] = useState([]);
+  const [submitted, setSubmitted] = useState(false);
   const [answer, setAnswer] = useState("");
+  const [score, setScore] = useState("");
+  const [feedback, setFeedback] = useState("");
   const [authorized, setAuthorized] = useState(true);
   const [role, setRole] = useState(2);
+  const [userId, setUserId] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -16,6 +20,7 @@ function AssignmentDescription({ loginCredentials, setLoginCredentials }) {
     const decode = async () => {
       const decodedToken = await decodeToken(loginCredentials?.token);
       setRole(parseInt(decodedToken.role));
+      setUserId(decodedToken.id);
       console.log(decodedToken);
     };
     decode();
@@ -56,6 +61,19 @@ function AssignmentDescription({ loginCredentials, setLoginCredentials }) {
       .catch((error) => console.log("error", error));
   }, []);
 
+  useEffect(() => {
+    if (role === 2 && submissions) {
+      const filtered = submissions.filter(
+        (submission) => submission.user_id == userId
+      );
+      if (filtered.length > 0) {
+        setScore(filtered[0].score);
+        setFeedback(filtered[0].feedback);
+        setSubmitted(true);
+      }
+    }
+  }, [submissions]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -78,12 +96,15 @@ function AssignmentDescription({ loginCredentials, setLoginCredentials }) {
       `http://localhost:8000/assignments/${id}/submissions/add`,
       requestOptions
     )
-      .then((response) => response.text())
+      .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        setAnswer("");
       })
       .catch((error) => console.log("error", error));
+
+    setSubmitted(true);
+    alert("Submitted Successfully!");
+    setAnswer("");
   };
 
   const handleLogout = (e) => {
@@ -94,35 +115,44 @@ function AssignmentDescription({ loginCredentials, setLoginCredentials }) {
 
   return (
     <div>
-      {authorized ? (
-        <section className="assignments">
-          <h2>{assignment.title}</h2>
-          {role === 2 ? (
-            <div>
-              <div>{assignment.body}</div>
-              <textarea
-                className="answer"
-                onChange={(e) => setAnswer(e.target.value)}
-              />
-              <button onClick={handleSubmit}>Submit assignment</button>
-            </div>
-          ) : (
-            <div>
-              <Submissions
-                submissions={submissions}
-                setSubmissions={setSubmissions}
-                loginCredentials={loginCredentials}
-                id={id}
-              />
-            </div>
-          )}
-          <button className="logoutButton" onClick={handleLogout}>
-            Log out
-          </button>
-        </section>
+      {submitted ? (
+        <div>
+          <b>{score || `Not graded yet`}</b>
+          <div>{feedback || `No Feedback`}</div>
+        </div>
       ) : (
-        <b>Unauthorized User</b>
+        <div>
+          {authorized ? (
+            <section className="assignments">
+              <h2>{assignment.title}</h2>
+              {role === 2 ? (
+                <div>
+                  <div>{assignment.body}</div>
+                  <textarea
+                    className="answer"
+                    onChange={(e) => setAnswer(e.target.value)}
+                  />
+                  <button onClick={handleSubmit}>Submit assignment</button>
+                </div>
+              ) : (
+                <div>
+                  <Submissions
+                    submissions={submissions}
+                    setSubmissions={setSubmissions}
+                    loginCredentials={loginCredentials}
+                    id={id}
+                  />
+                </div>
+              )}
+            </section>
+          ) : (
+            <b>Unauthorized User</b>
+          )}
+        </div>
       )}
+      <button className="logoutButton" onClick={handleLogout}>
+        Log out
+      </button>
     </div>
   );
 }

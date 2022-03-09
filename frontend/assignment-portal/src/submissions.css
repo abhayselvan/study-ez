@@ -1,0 +1,24 @@
+table {
+  margin-top: 30px;
+  border-style: none;
+  padding: 20px;
+}
+
+th {
+  text-align: center;
+  align-self: center;
+  color: tomato;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+tbody {
+  text-align: center;
+  align-self: center;
+  border-style: solid;
+  padding: 20px;
+}
+
+button .edit {
+  background-color: #4caf50; /* Green */
+}

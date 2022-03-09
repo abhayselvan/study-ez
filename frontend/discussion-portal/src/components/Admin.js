@@ -63,13 +63,13 @@ const Admin = ({ loginCredentials, setLoginCredentials }) => {
     <div>
       {!loading && (
         <form>
-          <h2>Verification</h2>
-          <ul>
+          <h2 className="adminHeading">Verification</h2>
+          <ul className="profList">
             {users &&
               users.map((user) => {
                 return (
                   <li key={user.id}>
-                    <span>{user.email}</span>
+                    <span className="profEmail">{user.email}</span>
                     <button onClick={(e) => handleSubmit(e, user.id)}>
                       Approve
                     </button>

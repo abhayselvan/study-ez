@@ -111,18 +111,19 @@ function DiscussionDetails({ loginCredentials, setLoginCredentials }) {
         <section className="discussions">
           <h2>{discussion.title}</h2>
           <div>{discussion.body}</div>
-          <ul>
+          <ul className="itemList">
             {comments.map((comment) => {
               return (
                 <li key={comment.comment_id}>
-                  <div>{comment.user_id}</div>
-                  <div>{comment.content}</div>
+                  <span className="userId">{`${comment.user_id} : `}</span>
+                  <span className="content">{comment.content}</span>
                 </li>
               );
             })}
           </ul>
           <div>
             <textarea
+              className="comment"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
             />

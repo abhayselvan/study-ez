@@ -35,10 +35,10 @@ section {
 .assignments {
   width: 100%;
   min-width: 800px;
-  min-height: 400px;
+  min-height: 650px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   padding: 1rem;
   background-color: rgba(0, 0, 0, 0.4);
@@ -58,6 +58,18 @@ form {
   align-items: center;
   flex-grow: 1;
   padding-bottom: 1rem;
+}
+
+table .submissions {
+  margin-top: 100px;
+  width: 100%;
+  border-color: #fff;
+  border-radius: 5px;
+  background-color: black;
+}
+
+th {
+  border-radius: 100px;
 }
 
 a,
@@ -97,6 +109,107 @@ button {
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
+}
+
+.outerBox {
+  width: 800px;
+  height: 1000px;
+}
+
+.itemList {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-content: flex-start;
+  list-style: circle;
+}
+
+.adminHeading {
+  justify-self: flex-start;
+}
+
+.profList {
+  list-style: none;
+  margin-top: 50px;
+  font-size: larger;
+}
+
+.profEmail {
+  margin-right: 30px;
+}
+
+.link {
+  text-decoration: none;
+  color: lightgreen;
+}
+
+.link:hover {
+  color: crimson;
+}
+
+.title {
+  margin-top: 100px;
+  width: 200px;
+}
+
+.textArea {
+  height: 200px;
+  width: 300px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.answer {
+  height: 500px;
+  width: 500px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.loginDetails {
+  font-size: smaller;
+  text-align: left;
+  align-self: flex-start;
+  justify-self: flex-start;
+}
+
+.signupDetails {
+  font-size: smaller;
+  margin-top: 10px;
+}
+
+.textbox {
+  margin-bottom: 15px;
+}
+
+.text {
+  text-align: left;
+  margin-bottom: 5px;
+}
+
+.radiobuttons {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: x-large;
+}
+
+.facultyButton {
+  margin-left: 10px;
+}
+
+.studentButton {
+  margin-left: 10px;
+}
+
+.submitButton {
+  margin-top: 30px;
+  width: 120px;
+}
+
+.registerButton {
+  width: 120px;
 }
 
 .logoutButton {

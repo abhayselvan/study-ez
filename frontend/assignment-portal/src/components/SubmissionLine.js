@@ -9,6 +9,7 @@ const SubmissionLine = ({ submission, editSubmission }) => {
       <td>{submission.feedback}</td>
       <td>
         <button
+          className="edit"
           onClick={(e) => {
             editSubmission(e, submission.submission_id);
           }}

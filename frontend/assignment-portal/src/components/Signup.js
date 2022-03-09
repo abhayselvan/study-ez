@@ -33,8 +33,8 @@ function Signup({ email, setEmail, password, setPassword }) {
       <h2>SIGN UP</h2>
       <form onChange={() => setErrorMessage("")}>
         <div className="errmsg">{errorMessage}</div>
-        <div>
-          Name:
+        <div className="signupDetails">
+          <div className="text">Name</div>
           <input
             type="text"
             name="name"
@@ -45,8 +45,8 @@ function Signup({ email, setEmail, password, setPassword }) {
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-        <div>
-          Email:
+        <div className="signupDetails">
+          <div className="text">Email</div>
           <input
             type="text"
             name="email"
@@ -57,8 +57,8 @@ function Signup({ email, setEmail, password, setPassword }) {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div>
-          Password:
+        <div className="signupDetails">
+          <div className="text">Password</div>
           <input
             type="password"
             name="password"
@@ -68,8 +68,13 @@ function Signup({ email, setEmail, password, setPassword }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <div required onChange={(e) => setRole(e.target.value)}>
+          <span
+            className="radiobuttons"
+            required
+            onChange={(e) => setRole(e.target.value)}
+          >
             <input
+              className="studentButton"
               type="radio"
               checked={role === "student"}
               onChange={() => {}}
@@ -78,6 +83,7 @@ function Signup({ email, setEmail, password, setPassword }) {
             />{" "}
             Student
             <input
+              className="facultyButton"
               type="radio"
               checked={role === "faculty"}
               onChange={() => {}}
@@ -85,7 +91,7 @@ function Signup({ email, setEmail, password, setPassword }) {
               name="faculty"
             />{" "}
             Faculty
-          </div>
+          </span>
         </div>
         <button onClick={handleSubmit}>Register</button>
       </form>

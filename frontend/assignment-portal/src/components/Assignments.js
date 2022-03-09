@@ -83,16 +83,17 @@ function Assignments({ loginCredentials, setLoginCredentials }) {
   };
 
   return (
-    <div>
+    <div className="outerBox">
       {authorized ? (
         <section className="assignments">
           <h2>ASSIGNMENTS</h2>
-          <ul>
+          <ul className="itemList">
             {!loading &&
               assignments.map((item) => {
                 return (
-                  <li key={item.assignment_id}>
+                  <li className="item" key={item.assignment_id}>
                     <Link
+                      className="link"
                       to={`/assignments/${item.assignment_id}`}
                       key={item.assignment_id}
                     >
@@ -105,12 +106,14 @@ function Assignments({ loginCredentials, setLoginCredentials }) {
           {role === 1 && (
             <div>
               <input
+                className="title"
                 type="text"
                 value={title}
                 placeholder="Enter title"
                 onChange={(e) => setTitle(e.target.value)}
               />
               <textarea
+                className="textArea"
                 placeholder="Enter description"
                 value={body}
                 onChange={(e) => setBody(e.target.value)}

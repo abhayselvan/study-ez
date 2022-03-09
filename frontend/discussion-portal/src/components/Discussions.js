@@ -83,16 +83,17 @@ function Discussions({ loginCredentials, setLoginCredentials }) {
   };
 
   return (
-    <div>
+    <div className="outerBox">
       {authorized ? (
         <section className="discussions">
           <h2>DISCUSSIONS</h2>
-          <ul>
+          <ul className="itemList">
             {!loading &&
               discussions.map((item) => {
                 return (
-                  <li key={item.discussion_id}>
+                  <li className="item" key={item.discussion_id}>
                     <Link
+                      className="link"
                       to={`/discussions/${item.discussion_id}`}
                       key={item.discussion_id}
                     >
@@ -105,12 +106,14 @@ function Discussions({ loginCredentials, setLoginCredentials }) {
           {role === 2 && (
             <div>
               <input
+                className="title"
                 type="text"
                 value={title}
                 placeholder="Enter title"
                 onChange={(e) => setTitle(e.target.value)}
               />
               <textarea
+                className="textArea"
                 placeholder="Enter description"
                 value={body}
                 onChange={(e) => setBody(e.target.value)}

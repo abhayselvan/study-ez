@@ -45,9 +45,10 @@ function Login({
       <h2>LOGIN</h2>
       <form onChange={() => setErrorMessage("")}>
         <div className="errmsg">{errorMessage}</div>
-        <div>
-          Email:
+        <div className="loginDetails">
+          <div className="text">Email</div>
           <input
+            className="textbox"
             type="text"
             name="email"
             placeholder="Enter Email"
@@ -56,9 +57,10 @@ function Login({
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div>
-          Password:
+        <div className="loginDetails">
+          <div className="text">Password</div>
           <input
+            className="textbox"
             type="password"
             name="password"
             placeholder="Enter Password"
@@ -67,10 +69,12 @@ function Login({
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button onClick={handleSubmit}>Login</button>
+        <button className="submitButton" onClick={handleSubmit}>
+          Login
+        </button>
       </form>
       <Link to="/signup">
-        <button>Register</button>
+        <button className="registerButton">Register</button>
       </Link>
     </section>
   );

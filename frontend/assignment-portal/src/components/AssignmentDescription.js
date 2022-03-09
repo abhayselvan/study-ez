@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Submissions from "./Submissions";
@@ -101,7 +100,10 @@ function AssignmentDescription({ loginCredentials, setLoginCredentials }) {
           {role === 2 ? (
             <div>
               <div>{assignment.body}</div>
-              <textarea onChange={(e) => setAnswer(e.target.value)} />
+              <textarea
+                className="answer"
+                onChange={(e) => setAnswer(e.target.value)}
+              />
               <button onClick={handleSubmit}>Submit assignment</button>
             </div>
           ) : (

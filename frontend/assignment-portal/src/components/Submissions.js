@@ -1,7 +1,7 @@
-import axios from "axios";
 import { Fragment, useState } from "react";
 import SubmissionEdit from "./SubmissionEdit";
 import SubmissionLine from "./SubmissionLine";
+import "../submissions.css";
 
 const Submissions = ({ submissions, setSubmissions, loginCredentials, id }) => {
   const [editId, setEditId] = useState(null);
@@ -50,7 +50,7 @@ const Submissions = ({ submissions, setSubmissions, loginCredentials, id }) => {
 
   return (
     <div>
-      <table>
+      <table className="submissions">
         <thead>
           <tr>
             <th>Student ID</th>

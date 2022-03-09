@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Assignments from "./components/Assignments";
 import AssignmentDescription from "./components/AssignmentDescription";
 import Admin from "./components/Admin";
-import { decodeToken } from "react-jwt";
 import "./App.css";
 
 function App() {
